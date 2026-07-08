@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --accent: #c97b5d; /* rust */
+  --accent-2: #a78bfa; /* muted violet */
+}
+
+/* Lenis smooth-scroll: native smooth behavior must be off or they fight */
+html.lenis {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  @apply bg-void text-bone antialiased overflow-x-hidden;
+}
+
+/* CRT scanline overlay — sits above everything, never intercepts input */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+}
+
+::selection {
+  background: rgba(201, 123, 93, 0.35);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0e14;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(201, 123, 93, 0.4);
+  border-radius: 3px;
+}
+
+@layer components {
+  /* Glassmorphism panel used across all sections */
+  .glass {
+    @apply bg-white/[0.03] backdrop-blur-md border border-rust/15 rounded-lg;
+  }
+
+  .glass-hover {
+    @apply transition-all duration-300 hover:border-rust/40 hover:shadow-glow-rust hover:bg-white/[0.05];
+  }
+
+  .text-glow-rust {
+    text-shadow: 0 0 10px rgba(201, 123, 93, 0.55), 0 0 32px rgba(201, 123, 93, 0.22);
+  }
+
+  .text-glow-violet {
+    text-shadow: 0 0 10px rgba(167, 139, 250, 0.5), 0 0 32px rgba(167, 139, 250, 0.2);
+  }
+
+  /* Subtle glow for large display text. Uses em units so the halo scales
+     with the font size instead of blooming on big headings — the px-based
+     .text-glow-rust above is tuned for small mono labels only. */
+  .text-glow-heading {
+    text-shadow: 0 0 0.14em rgba(201, 123, 93, 0.35), 0 0 0.4em rgba(201, 123, 93, 0.15);
+  }
+
+  /* Small HUD label — monospace, tracked out, dim rust */
+  .hud-label {
+    @apply font-mono text-[10px] sm:text-xs uppercase tracking-[0.3em] text-rust/80;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-6 py-3 font-mono text-sm uppercase tracking-widest
+      bg-rust/10 border border-rust/50 text-rust rounded
+      transition-all duration-300 hover:bg-rust/20 hover:shadow-glow-rust;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-6 py-3 font-mono text-sm uppercase tracking-widest
+      bg-transparent border border-steel/30 text-steel rounded
+      transition-all duration-300 hover:border-violet/60 hover:text-violet hover:shadow-glow-violet;
+  }
+}
+
+/* Blueprint grid — lives in the parallax BackgroundFX layer, not on body,
+   so it can drift at a different speed than the content */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(201, 123, 93, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 123, 93, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Faint CRT scanlines inside the Terminal Playground output */
+.terminal-scanlines {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(201, 123, 93, 0.025) 0px,
+    rgba(201, 123, 93, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* Thin animated line under section headings */
+.heading-line {
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+
+/* Holographic silhouette shown on mobile instead of the 3D scene */
+.holo-fallback {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(201, 123, 93, 0.14) 0%,
+    rgba(167, 139, 250, 0.08) 45%,
+    transparent 70%
+  );
+}
